@@ -1,0 +1,101 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: galaxy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: galaxy-server
+  namespace: galaxy
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: galaxy-server
+  template:
+    metadata:
+      labels:
+        app: galaxy-server
+    spec:
+      containers:
+        - name: app
+          image: docker.fast.ar/galaxy:latest
+          ports:
+            - name: web
+              containerPort: 8080
+              protocol: TCP
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: galaxy-server-service
+  namespace: galaxy
+spec:
+  selector:
+    app: galaxy-server
+  ports:
+    - port: 8000
+      targetPort: 8080
+  sessionAffinity: ClientIP
+  type: LoadBalancer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: api-galaxy-fast-ar
+  namespace: galaxy
+spec:
+  secretName: api-galaxy-fast-ar-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - api.galaxy.fast.ar
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-registry-ingress-secure
+  namespace: galaxy
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`api.galaxy.fast.ar`)
+    kind: Rule
+    services:
+    - name: galaxy-server-service
+      port: 8000
+  tls:
+    secretName: api-galaxy-fast-ar-tls
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-registry-ingress
+  namespace: galaxy
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`api.galaxy.fast.ar`)
+    kind: Rule
+    services:
+    - name: galaxy-server-service
+      port: 8000
+    middlewares:
+    - name: https-redirect
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect
+  namespace: galaxy
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
