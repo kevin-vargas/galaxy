@@ -8,13 +8,12 @@ env:
   BRANCH_NAME: ${{ GITHUB_REF##*/ }}
 
 jobs:
-  git_flow:
+  gitflow:
     runs-on: ubuntu-20.04
     steps:
     - name: Branch Name Check
-      env:
-        ALLOWED: "((feature|fix)\/[A-Z0-9a-z-]+)$"
       run: |
+        ALLOWED="((feature|fix)\/[A-Z0-9a-z-]+)$"
         echo $BRANCH_NAME
         if ! [[ "$BRANCH_NAME" =~ $ALLOWED ]]
         then
