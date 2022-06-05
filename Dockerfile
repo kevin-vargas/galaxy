@@ -6,6 +6,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN apk add git
+
 RUN apk --no-cache add ca-certificates
 
 RUN go get -d -v

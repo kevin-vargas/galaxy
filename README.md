@@ -59,3 +59,37 @@ To be able to deploy it is necessary to be authenticated against the cluster and
 ```shell
     ./deploy.sh
 ```
+
+## Live API
+
+The api can be tested on the following domain
+
+```
+    https://api.galaxy.fast.ar
+```
+
+## CURL example
+
+```
+curl --location --request POST 'https://api.galaxy.fast.ar/v1/topsecret' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "satellites": [
+        {
+            "name":"kenobi",
+            "distance": 200.0,
+            "message": ["este","","","mensaje",""]
+        },
+         {
+            "name":"skywalker",
+            "distance": 500,
+            "message": ["","es","","","secreto"]
+        },
+         {
+            "name":"sato",
+            "distance": 904.3973,
+            "message": ["este","","un","",""]
+        }
+    ]
+}'
+```
