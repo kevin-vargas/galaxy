@@ -12,3 +12,6 @@ out/
 
 #MacOS
 .DS_Store
+
+#Coverage
+coverage.out

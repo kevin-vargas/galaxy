@@ -1,0 +1,22 @@
+name: gitflow check
+
+on:
+  pull_request:
+    branches: [main]
+env:
+  BRANCH_NAME: ${{ GITHUB_REF##*/ }}
+jobs:
+  gitflow:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Branch Name Check
+      env:
+        ALLOWED: "((feature|fix)\/[A-Z0-9a-z-]+)$"
+      run: |
+        echo $BRANCH_NAME
+        if ! [[ "$BRANCH_NAME" =~ $ALLOWED ]]
+        then
+            echo "Wrong branch name"
+            exit 1
+        fi
+        echo "Successful branch name check"
