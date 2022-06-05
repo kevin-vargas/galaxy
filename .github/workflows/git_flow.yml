@@ -3,10 +3,12 @@ name: gitflow check
 on:
   pull_request:
     branches: [main]
+
 env:
   BRANCH_NAME: ${{ GITHUB_REF##*/ }}
+
 jobs:
-  gitflow:
+  git_flow:
     runs-on: ubuntu-20.04
     steps:
     - name: Branch Name Check
