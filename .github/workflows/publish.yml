@@ -60,5 +60,5 @@ jobs:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
       - name: Image digest
         run: |
-        kubectl apply -f deployment/deployment.yml
-        kubectl rollout restart deployment galaxy-server -n galaxy
+          kubectl apply -f deployment/deployment.yml
+          kubectl rollout restart deployment galaxy-server -n galaxy
