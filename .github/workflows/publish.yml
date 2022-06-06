@@ -3,8 +3,8 @@ name: cd
 on:
   push:
     branches: [main]
-  paths:
-    - '**.go'
+    paths:
+      - '**.go'
 
 jobs:
   build:

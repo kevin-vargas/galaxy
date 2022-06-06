@@ -13,7 +13,7 @@ func NewRouter(r *chi.Mux, t usecase.Triangulation, s usecase.Session, m ...func
 	})
 	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("pong"))
+		w.Write([]byte("peng"))
 	})
 	// Routers
 	r.Mount("/v1", newRoutes(t, s, m...))
