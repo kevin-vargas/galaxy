@@ -55,10 +55,8 @@ jobs:
     runs-on: ubuntu-20.04
     needs: build
     steps:
-      - uses: tale/kubectl-action@v1
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-      - name: Image digest
-        run: |
-          kubectl apply -f deployment/deployment.yml
-          kubectl rollout restart deployment galaxy-server -n galaxy
+          args: apply -f deployment/deployment.yml && kubectl rollout restart deployment galaxy-server -n galaxy
